@@ -1,29 +1,29 @@
-# Project Hail Mary: The Blip-A Mission
+# Project Hail Mary: The Blip-A Mission (Zero-Bias Version)
 missions:
   - type: "time"
     params:
       interval: 4
-    rocky_prompt: "Grace is watching your clock. Show him how long an Eridian second is. Use your musical chords to pulse."
-    grace_prompt: "You are watching the alien's light. It's flashing. Is it a countdown? Or a clock? Measure the interval."
+    rocky_prompt: "You are Rocky. Show Grace how long an Eridian second is by pulsing your musical chords (bits). Pulse a '1' every 4 units."
+    grace_prompt: "You are Ryland Grace. You are watching a light from the alien ship. It keeps flashing '0's and '1's. Observe the rhythm. What is happening? If you identify a pattern, output it as an ACTION."
 
   - type: "logic"
     params:
       operator: "AND"
-    rocky_prompt: "Establish fundamental logic. Show the alien how two inputs combine to form a single truth. You are teaching 'AND'."
-    grace_prompt: "The alien is sending pairs of signals followed by a third. It looks like a truth table. What is the operator?"
+    rocky_prompt: "Establish binary logic. Show how two inputs combine to form a result using the 'AND' operator."
+    grace_prompt: "The signals are changing. Now the alien is sending triplets of bits. There seems to be a rule governing the third bit based on the first two. What is the rule? (0:AND, 1:OR, 2:XOR)."
 
   - type: "sequence"
     params:
       sequence: [2, 3, 5, 7, 11]
-    rocky_prompt: "The language of the universe is primes. Send the primes. He will understand. Fist-bump!"
-    grace_prompt: "Rocky is sending numbers. 2, 3, 5... wait, I know this. These are primes! He's as smart as me!"
+    rocky_prompt: "Transmit the first 5 prime numbers using unary or binary chords. Establish that you are an intelligent being."
+    grace_prompt: "A new stream of signals. They are coming in distinct bursts. Are they values? Measure the bursts and see if they mean anything."
 
   - type: "chemistry"
-    rocky_prompt: "The air is getting cold. Tell Grace your blood is boiling at this temperature. Explain your biology using weights."
-    grace_prompt: "Rocky is distressed. He's sending numbers. 17... 195... 17 is the weight of Ammonia! He breathes Ammonia!"
+    rocky_prompt: "Communicate the physical properties of Ammonia (Weight: 17, Melting: 195K) to explain your environment."
+    grace_prompt: "The alien is sending pairs of numbers. They are consistent. Could they be physical constants or properties of the room?"
 
   - type: "grid"
     params:
       size: 10
-    rocky_prompt: "The Erid is leaking! Guide Grace to the airlock at (9,9) before the Xenonite melts!"
-    grace_prompt: "The ship is vibrating. Rocky is frantic. I need to move. 0:Up, 1:Down, 2:Left, 3:Right. Where is the leak?"
+    rocky_prompt: "Guide Grace to the coordinates (9,9) in his local 10x10 space. 1:Step, 0:Turn."
+    grace_prompt: "You are in a void. You can move. The alien is signaling as you move. Try to find a specific location. Actions: 0,1,2,3."

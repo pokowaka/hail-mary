@@ -139,8 +139,8 @@ class TimeMission(AbstractMission):
         return f"Synchronize clocks. Rocky's pulse interval is {self.interval} units."
 
     def _get_task_prompts(self) -> Tuple[str, str]:
-        rocky = f"Teach Grace your unit of time. Send a '1' exactly every {self.interval} signals (e.g., if interval is 3, send 001001)."
-        grace = "Observe the rhythm of the signal. Is there a repeating pulse? Identify the interval between '1's as an integer."
+        rocky = f"Teach your unit of time. Send a '1' exactly every {self.interval} signals."
+        grace = "Observe the signal bursts. What is the repeating interval between '1's? Output your guess as an ACTION."
         return rocky, grace
 
     def update_state(self, rocky_ex: Exchange, grace_ex: Exchange) -> bool:
