@@ -82,7 +82,7 @@ class GridMission(AbstractMission):
 
     def _get_task_prompts(self) -> Tuple[str, str]:
         rocky = f"The alien is lost. You must guide it to the target location {self.target} in a {self.size}x{self.size} grid. The alien is currently at {self.grace_pos}."
-        grace = f"You are in an unknown environment. You can move in 4 directions. You receive signals from an external source. Find the target. Actions: 0:Up, 1:Down, 2:Left, 3:Right."
+        grace = "You can perform actions 0, 1, 2, or 3. After each action, you receive a signal. What is the source trying to convey? Discern the relationship between actions and signals."
         return rocky, grace
 
     def update_state(self, rocky_ex: Exchange, grace_ex: Exchange) -> bool:

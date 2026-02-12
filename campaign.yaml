@@ -1,29 +1,19 @@
-# Project Hail Mary: The Blip-A Mission (Zero-Bias Version)
+# Project Hail Mary: The Blip-A Mission (Pure Discovery Version)
 missions:
   - type: "time"
     params:
       interval: 4
-    rocky_prompt: "You are Rocky. Show Grace how long an Eridian second is by pulsing your musical chords (bits). Pulse a '1' every 4 units."
-    grace_prompt: "You are Ryland Grace. You are watching a light from the alien ship. It keeps flashing '0's and '1's. Observe the rhythm. What is happening? If you identify a pattern, output it as an ACTION."
+    rocky_prompt: "You are Rocky. Show Grace how long an Eridian second is by pulsing your musical chords. Pulse a '1' every 4 units."
+    grace_prompt: "You are receiving a stream of bits (0s and 1s). Observe the history. Is there a pattern or rhythm? Output your hypothesis or any detected value as an ACTION."
 
   - type: "logic"
     params:
       operator: "AND"
-    rocky_prompt: "Establish binary logic. Show how two inputs combine to form a result using the 'AND' operator."
-    grace_prompt: "The signals are changing. Now the alien is sending triplets of bits. There seems to be a rule governing the third bit based on the first two. What is the rule? (0:AND, 1:OR, 2:XOR)."
-
-  - type: "sequence"
-    params:
-      sequence: [2, 3, 5, 7, 11]
-    rocky_prompt: "Transmit the first 5 prime numbers using unary or binary chords. Establish that you are an intelligent being."
-    grace_prompt: "A new stream of signals. They are coming in distinct bursts. Are they values? Measure the bursts and see if they mean anything."
-
-  - type: "chemistry"
-    rocky_prompt: "Communicate the physical properties of Ammonia (Weight: 17, Melting: 195K) to explain your environment."
-    grace_prompt: "The alien is sending pairs of numbers. They are consistent. Could they be physical constants or properties of the room?"
+    rocky_prompt: "Establish fundamental binary logic. Demonstrate the 'AND' operator using pairs of inputs and one output."
+    grace_prompt: "The signals are now coming in groups. They seem to follow a consistent internal rule. What is the rule governing the bitstream?"
 
   - type: "grid"
     params:
       size: 10
-    rocky_prompt: "Guide Grace to the coordinates (9,9) in his local 10x10 space. 1:Step, 0:Turn."
-    grace_prompt: "You are in a void. You can move. The alien is signaling as you move. Try to find a specific location. Actions: 0,1,2,3."
+    rocky_prompt: "Guide the alien to coordinate (9,9) in a 10x10 space. 1:Step, 0:Turn."
+    grace_prompt: "You have four possible actions: 0, 1, 2, or 3. After each action, you receive a signal. Observe the correlation between your actions and the signals."
