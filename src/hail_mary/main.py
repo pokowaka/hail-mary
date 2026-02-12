@@ -4,6 +4,7 @@ from .agents import MockEridian, GeminiEridian
 from .channel import CommChannel
 from .campaign import CampaignManager
 from .mission import SequenceMission, GridMission, KnowledgeMission
+from .loader import load_campaign_from_yaml
 
 def main():
     parser = argparse.ArgumentParser(description="Project Hail Mary - Advanced Xeno-Comms")
@@ -12,6 +13,7 @@ def main():
     parser.add_argument("--noise", type=float, default=0.0, help="Probability of bit flip (0.0 to 1.0)")
     parser.add_argument("--energy", type=float, default=100.0, help="Total energy budget")
     parser.add_argument("--mode", type=str, default="single", choices=["single", "campaign"])
+    parser.add_argument("--config", type=str, help="Path to a YAML campaign config")
     
     args = parser.parse_args()
 
@@ -30,7 +32,9 @@ def main():
 
     # Define Missions
     missions = []
-    if args.mode == "campaign":
+    if args.config:
+        missions = load_campaign_from_yaml(args.config)
+    elif args.mode == "campaign":
         missions = [
             SequenceMission([1, 2, 3]),
             GridMission(size=3),

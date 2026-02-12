@@ -1,0 +1,29 @@
+# Project Hail Mary: The Blip-A Mission
+missions:
+  - type: "time"
+    params:
+      interval: 4
+    rocky_prompt: "Grace is watching your clock. Show him how long an Eridian second is. Use your musical chords to pulse."
+    grace_prompt: "You are watching the alien's light. It's flashing. Is it a countdown? Or a clock? Measure the interval."
+
+  - type: "logic"
+    params:
+      operator: "AND"
+    rocky_prompt: "Establish fundamental logic. Show the alien how two inputs combine to form a single truth. You are teaching 'AND'."
+    grace_prompt: "The alien is sending pairs of signals followed by a third. It looks like a truth table. What is the operator?"
+
+  - type: "sequence"
+    params:
+      sequence: [2, 3, 5, 7, 11]
+    rocky_prompt: "The language of the universe is primes. Send the primes. He will understand. Fist-bump!"
+    grace_prompt: "Rocky is sending numbers. 2, 3, 5... wait, I know this. These are primes! He's as smart as me!"
+
+  - type: "chemistry"
+    rocky_prompt: "The air is getting cold. Tell Grace your blood is boiling at this temperature. Explain your biology using weights."
+    grace_prompt: "Rocky is distressed. He's sending numbers. 17... 195... 17 is the weight of Ammonia! He breathes Ammonia!"
+
+  - type: "grid"
+    params:
+      size: 10
+    rocky_prompt: "The Erid is leaking! Guide Grace to the airlock at (9,9) before the Xenonite melts!"
+    grace_prompt: "The ship is vibrating. Rocky is frantic. I need to move. 0:Up, 1:Down, 2:Left, 3:Right. Where is the leak?"
