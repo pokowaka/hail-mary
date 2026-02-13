@@ -38,3 +38,11 @@ class DeepSeekClient(OpenAIClient):
             api_key=api_key or os.getenv("DEEPSEEK_API_KEY"),
             base_url="https://api.deepseek.com"
         )
+
+class OllamaClient(OpenAIClient):
+    def __init__(self, model: str = "llama3", base_url: str = "http://localhost:11434/v1"):
+        super().__init__(
+            model=model,
+            api_key="ollama", # Placeholder
+            base_url=base_url
+        )

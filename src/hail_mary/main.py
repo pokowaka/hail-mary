@@ -5,7 +5,7 @@ from .channel import CommChannel
 from .campaign import CampaignManager
 from .mission import SequenceMission, GridMission, KnowledgeMission
 from .loader import load_campaign_from_yaml
-from .llm.clients import OpenAIClient, AnthropicClient, DeepSeekClient
+from .llm.clients import OpenAIClient, AnthropicClient, DeepSeekClient, OllamaClient
 from .llm.gemini_wrapper import GeminiWrapper
 
 def get_llm_client(provider: str, model: str):
@@ -15,6 +15,8 @@ def get_llm_client(provider: str, model: str):
         return AnthropicClient(model=model)
     elif provider == "deepseek":
         return DeepSeekClient(model=model)
+    elif provider == "ollama":
+        return OllamaClient(model=model)
     elif provider == "gemini":
         return GeminiWrapper(model=model)
     else:
@@ -25,11 +27,11 @@ def main():
     parser.add_argument("--agent", type=str, default="mock", choices=["mock", "llm"])
     
     # Rocky Config
-    parser.add_argument("--rocky-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
+    parser.add_argument("--rocky-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek", "ollama"])
     parser.add_argument("--rocky-model", type=str, default="gemini-2.5-flash")
     
     # Grace Config
-    parser.add_argument("--grace-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
+    parser.add_argument("--grace-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek", "ollama"])
     parser.add_argument("--grace-model", type=str, default="gemini-2.5-flash")
     
     parser.add_argument("--noise", type=float, default=0.0, help="Probability of bit flip")
