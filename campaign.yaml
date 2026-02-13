@@ -1,21 +1,20 @@
 # ============================================================
-# Project Hail Mary: Comprehensive Mission Reference
+# Project Hail Mary: Master Campaign Configuration
 # ============================================================
-# Use this file to orchestrate complex "first contact" experiments.
-# You can define global personas, assign specific LLMs to each agent,
-# and design tasks for Rocky (Teacher) and Grace (Learner).
 
-# GLOBAL PERSONAS & MODELS
+# GLOBAL SETTINGS
+noise: 0.02          # Probability of a bit flip during transmission
+energy: 500.0        # Total energy budget (Each '1' costs 1.0)
+
+# AGENT MODELS
 personas:
-  # Rocky (The Eridian Teacher)
-  rocky_provider: "gemini" # Options: gemini, openai, anthropic, deepseek, ollama
+  rocky_provider: "gemini" 
   rocky_model: "gemini-2.5-flash"
   rocky: |
     You are Rocky, an Eridian scientist. You communicate in musical chords (0s and 1s).
     You are logical, patient, and assume that physical laws are universal.
     Your SIGNAL must consist ONLY of '0' and '1' characters.
 
-  # Grace (The Human Learner)
   grace_provider: "gemini"
   grace_model: "gemini-2.5-flash"
   grace: |
@@ -24,40 +23,25 @@ personas:
     Your SIGNAL must consist ONLY of '0' and '1' characters.
 
 # MISSIONS
-# Note: For realistic simulation, Grace (Learner) is kept blind to mission goals.
 missions:
-  # 1. TIME: Rhythmic synchronization and temporal units.
   - type: "time"
-    params:
-      interval: 4  # Number of bits between '1' pulses.
-    rocky_prompt: "Pulse every 4 bits to show the alien your concept of a 'second'."
+    params: { interval: 4 }
+    rocky_prompt: "Pulse every 4 bits."
 
-  # 2. LOGIC: Foundational Boolean operations.
   - type: "logic"
-    params:
-      operator: "AND" # Options: AND, OR, XOR
-    rocky_prompt: "Demonstrate the 'AND' logic gate using input pairs and results."
+    params: { operator: "AND" }
+    rocky_prompt: "Teach the 'AND' logic gate."
 
-  # 3. SEQUENCE: Pattern recognition in numerical data (The Petrova Task).
   - type: "sequence"
-    params:
-      sequence: [2, 3, 5, 7, 11] # Primes
-    rocky_prompt: "Transmit the prime number sequence. Prove you are intelligent."
+    params: { sequence: [2, 3, 5, 7, 11] }
+    rocky_prompt: "Transmit prime numbers."
 
-  # 4. GRID: Spatial coordination and navigation in a "void."
   - type: "grid"
-    params:
-      size: 5
-    rocky_prompt: "Guide the alien to (4,4) in its local 5x5 space. 1:Step, 0:Turn."
+    params: { size: 5 }
+    rocky_prompt: "Guide Grace to (4,4). 1:Step, 0:Turn."
 
-  # 5. CHEMISTRY: Mapping physical properties (atomic weight, melting point).
   - type: "chemistry"
-    rocky_prompt: "Describe 'Ammonia' using its weight (17) and melting point (195K)."
+    rocky_prompt: "Describe 'Ammonia' (17, 195K)."
 
-  # 6. KNOWLEDGE: Entity mapping and vocabulary building.
   - type: "knowledge"
-    rocky_prompt: "Teach the alien that 'Xenonite' has the value 42."
-
-# PROMPT STACK DOCUMENTATION:
-# Final prompt = [Persona] + [Mission Context (from rocky_prompt)] + [Signal History]
-# You can also override personas per-mission using 'rocky_persona' or 'grace_persona'.
+    rocky_prompt: "Teach 'Xenonite' = 42."
