@@ -1,19 +1,38 @@
-# Project Hail Mary: The Blip-A Mission (Pure Discovery Version)
+# Project Hail Mary: Campaign Configuration Reference
+# --------------------------------------------------
+# Use this file to design "first contact" experiments.
+# To ensure scientific validity, avoid giving the 'Learner' (Grace) 
+# any information about the goal, environment, or meaning of the bits.
+
 missions:
+  # 1. TIME MISSION: Tests rhythmic synchronization.
   - type: "time"
     params:
-      interval: 4
-    rocky_prompt: "You are Rocky. Show Grace how long an Eridian second is by pulsing your musical chords. Pulse a '1' every 4 units."
-    grace_prompt: "You are receiving a stream of bits (0s and 1s). Observe the history. Is there a pattern or rhythm? Output your hypothesis or any detected value as an ACTION."
+      interval: 4  # The number of bits between each '1' pulse.
+    rocky_prompt: "You are the Teacher. Show the Learner your unit of time. Pulse a '1' every 4 units."
+    grace_prompt: "You are the Learner. Observe the bits. Is there a rhythm? Output the interval as an ACTION."
 
+  # 2. LOGIC MISSION: Tests Boolean operator deduction.
   - type: "logic"
     params:
-      operator: "AND"
-    rocky_prompt: "Establish fundamental binary logic. Demonstrate the 'AND' operator using pairs of inputs and one output."
-    grace_prompt: "The signals are now coming in groups. They seem to follow a consistent internal rule. What is the rule governing the bitstream?"
+      operator: "AND" # Supports: AND, OR, XOR
+    rocky_prompt: "Teach the concept of 'AND'. Provide inputs and the resulting output."
+    grace_prompt: "Observe the triplets of bits. What is the rule? (0:AND, 1:OR, 2:XOR)."
 
+  # 3. GRID MISSION: Tests spatial awareness and coordination.
   - type: "grid"
     params:
-      size: 10
-    rocky_prompt: "Guide the alien to coordinate (9,9) in a 10x10 space. 1:Step, 0:Turn."
-    grace_prompt: "You have four possible actions: 0, 1, 2, or 3. After each action, you receive a signal. Observe the correlation between your actions and the signals."
+      size: 10 # A 10x10 coordinate space.
+    rocky_prompt: "The Learner is lost. Guide them to (9,9). 1:Move, 0:Turn."
+    grace_prompt: "You have actions 0, 1, 2, 3. Observe the signal feedback after each action."
+
+  # 4. SEQUENCE MISSION: Tests mathematical induction (Petrova Task).
+  - type: "sequence"
+    params:
+      sequence: [2, 3, 5, 7, 11] # Any list of integers.
+    rocky_prompt: "Transmit these specific values. Prove you are intelligent."
+    grace_prompt: "Identify the pattern in the values you are receiving."
+
+# GLOBAL MODIFIERS (passed via CLI):
+# --noise <float>: Probability of a bit flipping (e.g., 0.05).
+# --energy <float>: Total units of energy. Each '1' bit costs 1.0.

@@ -35,6 +35,26 @@ python3 -m hail_mary.main --noise 0.05
 - **Sequence (Petrova Task):** Identify mathematical patterns.
 - **Grid (Rendezvous):** Guide Grace to a target location in a 2D space.
 - **Knowledge (Elemental Mapping):** Map complex concepts like atomic weights.
+- **Time (Clock Sync):** Synchronize temporal units.
+- **Logic (Gates):** Deduce Boolean operators (AND, OR, XOR).
+
+## Designing Experiments
+
+You can define custom "First Contact" scenarios using a YAML configuration file. 
+
+### The Asymmetric Principle
+To maintain a realistic simulation, follow the **Asymmetric Principle**:
+1.  **Rocky (Teacher)** should know the goal and the "ground truth."
+2.  **Grace (Learner)** should only know his available actions and see the history of signals. He should *never* be told he is in a grid or looking for a sequence.
+
+### Example YAML Entry
+```yaml
+- type: "time"
+  params:
+    interval: 5
+  rocky_prompt: "Pulse every 5 bits."
+  grace_prompt: "You see bits. What is the pattern?"
+```
 
 ## Getting Started
 
