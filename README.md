@@ -28,28 +28,27 @@ The project uses a **YAML-First** architecture. All simulation parameters, agent
 hail-mary --config experiments/baseline_contact.yaml
 ```
 
-### 2. Multi-Provider Competition
+### 2. Scientific Anonymized Run
 
-Test how different models interact (e.g., GPT-4o vs. Claude 3.5):
-Edit `experiments/baseline_contact.yaml`:
-
-```yaml
-personas:
-  rocky_provider: "openai"
-  rocky_model: "gpt-4o"
-  grace_provider: "anthropic"
-  grace_model: "claude-3-5-sonnet-20240620"
-```
-
-### 3. Debugging (Verbose Mode)
-
-See the full "Chain of Thought" and raw API responses:
+Force agents to use pure logic by stripping identity tokens (Rocky/Grace) and using abstract labels (A/B):
 
 ```bash
-hail-mary --verbose
+hail-mary --config experiments/scientific_contact.yaml --tui
 ```
 
-## Mission Types
+## Analyzing Results
+
+Missions generate JSON logs containing internal thoughts, raw API exchanges, and a final expert analysis.
+
+### 1. The Overseer (Automated Analysis)
+At the end of every mission, a **Scientific Overseer** AI automatically evaluates the contact dynamics, providing metrics on social convergence, logic leakage, and efficiency.
+
+### 2. Manual Inspection
+Use the built-in analyzer to see the "Aha!" moments:
+
+```bash
+python3 -m hail_mary.analyze logs/campaign_log_YYYYMMDD_HHMMSS.json
+```
 
 | Type | Scenario | Victory Condition |
 | :--- | :--- | :--- |

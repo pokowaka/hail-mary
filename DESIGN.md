@@ -85,7 +85,23 @@ The YAML file is the primary interface for designing experiments.
   grace_persona: "..."   # Optional persona change for this specific task
 ```
 
-## 6. LLM Provider Support
+## 6. Automated Post-Mission Analysis (The Overseer)
+
+At the conclusion of each mission, the `CampaignManager` triggers a `ScientificAnalyst` agent. This agent:
+*   Reviews the full interaction history and internal thoughts.
+*   Synthesizes qualitative behavior into quantitative metrics.
+*   Outputs a structured JSON block containing `social_convergence`, `logic_leakage`, and `aha_moment_turn`.
+
+## 7. Scientific Logic Masking
+
+To prevent "Narrative Bias" (models relying on the plot of the novel), the simulation supports dynamic labeling:
+*   **Names Mode:** History is labeled `Rocky: ... | Grace: ...`
+*   **Abstract Mode:** History is labeled `A: ... | B: ...`
+*   **Identity Masking:** Personas are swapped for "Source" and "Observer."
+
+These modes are toggled via the `settings.label_style` field in the YAML configuration.
+
+## 8. LLM Provider Support
 
 The simulation uses an adapter pattern in `src/hail_mary/llm/`.
 *   **Supported:** `gemini`, `openai`, `anthropic`, `deepseek`, `ollama`.
