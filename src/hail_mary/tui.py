@@ -40,8 +40,8 @@ class SimulationTUI:
 
     def _get_header(self) -> Panel:
         return Panel(
-            Text(f"🚀 Mission: {self.mission_name} | Turn: {self.turn_count}", justify="center", style="bold magenta"),
-            style="white on blue"
+            Text(f"🚀 Mission: {self.mission_name} | Turn: {self.turn_count}", justify="center", style="bold cyan"),
+            border_style="magenta"
         )
 
     def _get_footer(self) -> Panel:
