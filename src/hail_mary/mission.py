@@ -10,6 +10,7 @@ class AbstractMission(abc.ABC):
         self.total_steps = 0
         self.rocky_override = None
         self.grace_override = None
+        self.success_turn: Optional[int] = None
 
     def set_overrides(self, rocky: str = None, grace: str = None):
         self.rocky_override = rocky

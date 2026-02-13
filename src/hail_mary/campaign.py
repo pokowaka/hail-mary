@@ -41,6 +41,7 @@ class CampaignManager:
             mission_data = {
                 "mission": mission.name,
                 "summary": mission.get_results(),
+                "turns_to_success": mission.success_turn,
                 "agents": {
                     "rocky": getattr(self.rocky, "metadata", {}),
                     "grace": getattr(self.grace, "metadata", {})
@@ -141,6 +142,7 @@ class CampaignManager:
                     print(f"    Grace action: {a_grace} (Analysis: {grace_analysis}...)")
                 
                 if mission.update_state(ex_rocky, ex_grace):
+                    mission.success_turn = turn + 1
                     if not tui: print(f"  ✅ Mission Objective Met in {turn+1} turns!")
                     else:
                         tui.update(

@@ -130,7 +130,7 @@ You will evaluate the interaction between two agents (A and B).
 Agent A (Source) knows the goal. Agent B (Observer) must deduce it.
 
 Your report must be objective and concise. You MUST end your response with a JSON block containing the following metrics:
-- turns_to_success: (int or null)
+- turns_to_success: (Use the value provided in MISSION DATA)
 - social_convergence: (0-10) How much they prioritized mirroring each other over logic.
 - logic_leakage: (bool) Did they mention book characters (Rocky/Grace) or roles (Eridian/Human)?
 - information_density: (0-10) How efficient was the bitstream?
