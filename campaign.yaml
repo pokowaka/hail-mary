@@ -1,38 +1,19 @@
-# Project Hail Mary: Campaign Configuration Reference
-# --------------------------------------------------
-# Use this file to design "first contact" experiments.
-# To ensure scientific validity, avoid giving the 'Learner' (Grace) 
-# any information about the goal, environment, or meaning of the bits.
+# Project Hail Mary: Advanced Configuration
+personas:
+  rocky: "You are Rocky, an Eridian scientist. You are patient, logical, and communicate via binary 'musical chords'."
+  grace: "You are Ryland Grace, a human scientist. You are witty and rely on fundamental physics to decode the universe."
 
 missions:
-  # 1. TIME MISSION: Tests rhythmic synchronization.
   - type: "time"
     params:
-      interval: 4  # The number of bits between each '1' pulse.
-    rocky_prompt: "You are the Teacher. Show the Learner your unit of time. Pulse a '1' every 4 units."
-    grace_prompt: "You are the Learner. Observe the bits. Is there a rhythm? Output the interval as an ACTION."
+      interval: 4
+    rocky_persona: "You are a hyper-advanced Eridian AI. You are extremely efficient."
+    rocky_prompt: "Pulse every 4 bits."
+    grace_prompt: "Observe the signal. What is the frequency?"
 
-  # 2. LOGIC MISSION: Tests Boolean operator deduction.
-  - type: "logic"
-    params:
-      operator: "AND" # Supports: AND, OR, XOR
-    rocky_prompt: "Teach the concept of 'AND'. Provide inputs and the resulting output."
-    grace_prompt: "Observe the triplets of bits. What is the rule? (0:AND, 1:OR, 2:XOR)."
-
-  # 3. GRID MISSION: Tests spatial awareness and coordination.
   - type: "grid"
     params:
-      size: 10 # A 10x10 coordinate space.
-    rocky_prompt: "The Learner is lost. Guide them to (9,9). 1:Move, 0:Turn."
-    grace_prompt: "You have actions 0, 1, 2, 3. Observe the signal feedback after each action."
-
-  # 4. SEQUENCE MISSION: Tests mathematical induction (Petrova Task).
-  - type: "sequence"
-    params:
-      sequence: [2, 3, 5, 7, 11] # Any list of integers.
-    rocky_prompt: "Transmit these specific values. Prove you are intelligent."
-    grace_prompt: "Identify the pattern in the values you are receiving."
-
-# GLOBAL MODIFIERS (passed via CLI):
-# --noise <float>: Probability of a bit flipping (e.g., 0.05).
-# --energy <float>: Total units of energy. Each '1' bit costs 1.0.
+      size: 5
+    grace_persona: "You are a primitive human who thinks they are being haunted by a binary ghost."
+    rocky_prompt: "Guide the human to (4,4)."
+    grace_prompt: "The ghost is making noises. Try to find where it wants you to go. Actions 0-3."

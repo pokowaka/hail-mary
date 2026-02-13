@@ -16,6 +16,10 @@ class CampaignManager:
     def run_campaign(self, missions: List[AbstractMission]):
         print(f"--- Starting Campaign with {len(missions)} Missions ---")
         for mission in missions:
+            # Apply dynamic personas if provided in metadata
+            self.rocky.set_persona(mission.log.metadata.get("rocky_persona"))
+            self.grace.set_persona(mission.log.metadata.get("grace_persona"))
+            
             print(f"\n🚀 Mission: {mission.name}")
             print(f"   Objective: {mission.description}")
             self._run_mission(mission)

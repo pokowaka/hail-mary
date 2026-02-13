@@ -2,9 +2,11 @@ import yaml
 from typing import List
 from .mission import AbstractMission, SequenceMission, GridMission, KnowledgeMission
 
-def load_campaign_from_yaml(file_path: str) -> List[AbstractMission]:
+def load_campaign_from_yaml(file_path: str):
     with open(file_path, "r") as f:
         config = yaml.safe_load(f)
+    
+    global_personas = config.get("personas", {})
     
     missions = []
     for m_cfg in config.get("missions", []):
@@ -31,6 +33,11 @@ def load_campaign_from_yaml(file_path: str) -> List[AbstractMission]:
             rocky=m_cfg.get("rocky_prompt"),
             grace=m_cfg.get("grace_prompt")
         )
+        
+        # Store persona overrides in mission metadata or handle in main
+        mission.log.metadata["rocky_persona"] = m_cfg.get("rocky_persona") or global_personas.get("rocky")
+        mission.log.metadata["grace_persona"] = m_cfg.get("grace_persona") or global_personas.get("grace")
+        
         missions.append(mission)
             
     return missions
