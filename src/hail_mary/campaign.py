@@ -106,15 +106,23 @@ class CampaignManager:
                 if mission.update_state(ex_rocky, ex_grace):
                     if not tui: print(f"  ✅ Mission Objective Met in {turn+1} turns!")
                     else:
-                        tui.update(rocky_thought="MISSION ACCOMPLISHED! Amaaze!", grace_thought="Pattern identified. We saved Earth.")
-                        time.sleep(2.0)
+                        tui.update(
+                            rocky_thought="MISSION ACCOMPLISHED! Amaaze!", 
+                            grace_thought="Pattern identified. We saved Earth.",
+                            status="COMPLETED - Press Enter to continue"
+                        )
+                        input()
                     break
                 
                 if self.channel.is_depleted():
                     if not tui: print("  ❌ MISSION FAILURE: Energy Depleted.")
                     else:
-                        tui.update(rocky_thought="Bad, bad, bad! Out of energy!", grace_thought="I've lost the signal...")
-                        time.sleep(2.0)
+                        tui.update(
+                            rocky_thought="Bad, bad, bad! Out of energy!", 
+                            grace_thought="I've lost the signal...",
+                            status="FAILED - Press Enter to continue"
+                        )
+                        input()
                     break
 
     def _save_campaign_log(self):

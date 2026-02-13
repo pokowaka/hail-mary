@@ -21,6 +21,7 @@ class SimulationTUI:
         self.energy_remaining = 100.0
         self.energy_total = 100.0
         self.turn_count = 0
+        self.status_message = "Simulation Active"
         self.history = []
         self.layout = self._make_layout()
 
@@ -48,7 +49,9 @@ class SimulationTUI:
         progress = ProgressBar(total=self.energy_total, completed=self.energy_remaining, width=40)
         content = Group(
             Text.assemble(
-                ("Energy: ", "bold"),
+                ("Status: ", "bold"),
+                (f"{self.status_message} ", "yellow"),
+                ("| Energy: ", "bold"),
                 (f"{self.energy_remaining:.1f}/{self.energy_total} ", "cyan")
             ),
             progress
@@ -95,12 +98,13 @@ class SimulationTUI:
             
         return Panel(table, title="[Chords]", border_style="dim")
 
-    def update(self, rocky_thought=None, rocky_signal=None, grace_thought=None, grace_action=None, energy=None):
+    def update(self, rocky_thought=None, rocky_signal=None, grace_thought=None, grace_action=None, energy=None, status=None):
         if rocky_thought: self.rocky_thought = rocky_thought
         if rocky_signal: self.rocky_signal = rocky_signal
         if grace_thought: self.grace_thought = grace_thought
         if grace_action is not None: self.grace_action = grace_action
         if energy is not None: self.energy_remaining = energy
+        if status: self.status_message = status
 
     def record_turn(self, rocky_signal: str, grace_signal: str):
         self.turn_count += 1
