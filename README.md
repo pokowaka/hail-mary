@@ -38,6 +38,23 @@ python3 -m hail_mary.main --noise 0.05
 - **Time (Clock Sync):** Synchronize temporal units.
 - **Logic (Gates):** Deduce Boolean operators (AND, OR, XOR).
 
+## Mission Types & Victory Conditions
+
+Each mission has a specific internal state and a "Completion Condition" that terminates the loop and moves to the next stage of the campaign.
+
+| Type | Name | Agent Interactions | Completion Condition |
+| :--- | :--- | :--- | :--- |
+| `sequence` | Petrova Sequence | Rocky sends integers; Grace attempts to predict the next value. | Run for the length of the provided `sequence`. |
+| `grid` | Rendezvous Task | Rocky knows the target; Grace moves in 4 directions (0-3). | Grace's coordinates match the secret `target`. |
+| `time` | Temporal Sync | Rocky pulses at a fixed interval; Grace deduces the frequency. | Run for 5 "beats" of the pulse. |
+| `logic` | Logic Gate | Rocky sends inputs (A, B) and output (C). Grace deduces the operator. | Run for all 4 basic truth-table combinations. |
+| `knowledge` | Elemental Mapping | Rocky sends specific values (e.g. weights) for named entities. | Run for all elements in the mapping. |
+
+### Technical Metrics
+*   **Accuracy:** Calculated for `sequence` and `logic` based on Grace's `ACTION` output.
+*   **Efficiency:** Measured by `energy_remaining` at the end of the mission.
+*   **Latency:** Recorded as `total_steps` or turns taken to reach the goal (especially for `grid`).
+
 ## Designing Experiments
 
 You can define custom "First Contact" scenarios using a YAML configuration file. 
