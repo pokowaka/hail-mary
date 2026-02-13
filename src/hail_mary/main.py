@@ -25,7 +25,7 @@ def get_llm_client(provider: str, model: str):
 
 def main():
     parser = argparse.ArgumentParser(description="Project Hail Mary - AI Xeno-Comms Simulation")
-    parser.add_argument("--config", type=str, default="campaign.yaml", help="Path to the mission configuration")
+    parser.add_argument("--config", type=str, default="experiments/baseline_contact.yaml", help="Path to the mission configuration")
     parser.add_argument("--verbose", action="store_true", help="Enable detailed trace logging")
     
     args = parser.parse_args()
