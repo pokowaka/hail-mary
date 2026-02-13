@@ -1,19 +1,56 @@
-# Project Hail Mary: Advanced Configuration
-personas:
-  rocky: "You are Rocky, an Eridian scientist. You are patient, logical, and communicate via binary 'musical chords'."
-  grace: "You are Ryland Grace, a human scientist. You are witty and rely on fundamental physics to decode the universe."
+# ============================================================
+# Project Hail Mary: Comprehensive Mission Reference
+# ============================================================
+# Use this file to orchestrate complex "first contact" experiments.
+# You can define global personas, override them per mission, and
+# design specific tasks for Rocky (Teacher) and Grace (Learner).
 
+# GLOBAL PERSONAS
+# These are the default "worldviews" for the agents across the campaign.
+# HOW THEY WORK: The final prompt for an agent is:
+# [PERSONA] + [MISSION CONTEXT (from rocky/grace_prompt)] + [SIGNAL HISTORY]
+personas:
+  rocky: |
+    You are Rocky, an Eridian scientist. You communicate in musical chords (0s and 1s).
+    You are logical, patient, and assume that physical laws are universal.
+  grace: |
+    You are Ryland Grace, a human scientist. You are skeptical but analytical.
+    You rely on the scientific method to find meaning in noisy signals.
+
+# MISSIONS
 missions:
+  # 1. TIME: Rhythmic synchronization and temporal units.
   - type: "time"
     params:
-      interval: 4
-    rocky_persona: "You are a hyper-advanced Eridian AI. You are extremely efficient."
-    rocky_prompt: "Pulse every 4 bits."
-    grace_prompt: "Observe the signal. What is the frequency?"
+      interval: 4  # Number of bits between '1' pulses.
+    rocky_prompt: "Pulse every 4 bits to show the alien your concept of a 'second'."
 
+  # 2. LOGIC: Foundational Boolean operations.
+  - type: "logic"
+    params:
+      operator: "AND" # Options: AND, OR, XOR
+    rocky_prompt: "Demonstrate the 'AND' logic gate using input pairs and results."
+
+  # 3. SEQUENCE: Pattern recognition in numerical data (The Petrova Task).
+  - type: "sequence"
+    params:
+      sequence: [2, 3, 5, 7, 11] # Primes
+    rocky_prompt: "Transmit the prime number sequence. Prove you are intelligent."
+
+  # 4. GRID: Spatial coordination and navigation in a "void."
   - type: "grid"
     params:
       size: 5
-    grace_persona: "You are a primitive human who thinks they are being haunted by a binary ghost."
-    rocky_prompt: "Guide the human to (4,4)."
-    grace_prompt: "The ghost is making noises. Try to find where it wants you to go. Actions 0-3."
+    rocky_prompt: "Guide the alien to (4,4) in its local 5x5 space. 1:Step, 0:Turn."
+
+  # 5. CHEMISTRY: Mapping physical properties (atomic weight, melting point).
+  - type: "chemistry"
+    rocky_prompt: "Describe 'Ammonia' using its weight (17) and melting point (195K)."
+
+  # 6. KNOWLEDGE: Entity mapping and vocabulary building.
+  - type: "knowledge"
+    rocky_prompt: "Teach the alien that 'Xenonite' has the value 42."
+
+# OPTIONAL PER-MISSION PERSONA OVERRIDES:
+#   rocky_persona: "You are an aggressive alien..."
+#   grace_persona: "You are a terrified survivor..."

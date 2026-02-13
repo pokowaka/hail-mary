@@ -73,6 +73,20 @@ To maintain a realistic simulation, follow the **Asymmetric Principle**:
   grace_prompt: "You see bits. What is the pattern?"
 ```
 
+## The Prompt Stack (Advanced)
+
+The simulation builds the final instruction for the AI by stacking different context layers. Understanding this stack is key to designing effective experiments.
+
+| Layer | Source | Purpose |
+| :--- | :--- | :--- |
+| **Persona** | `personas:` or `_persona:` | Sets the "Who" (e.g., identity, logic, patience). |
+| **Mission Context** | `rocky/grace_prompt` | Sets the "What" (e.g., current goal or observation). |
+| **Signal History** | Internal State | Sets the "When" (e.g., what has been said so far). |
+
+### Hierarchy
+1.  **Mission Override:** If `rocky_persona` is defined in a mission, it completely replaces the global `personas: rocky`.
+2.  **Statelessness:** Between missions, the agents' *memories* are wiped, but their *Persona* persists unless changed.
+
 ## Getting Started
 
 ### Running a Full Campaign
