@@ -28,6 +28,7 @@ def main():
     parser.add_argument("--config", type=str, default="experiments/baseline_contact.yaml", help="Path to the mission configuration")
     parser.add_argument("--mission", type=str, help="Name of a specific mission to run")
     parser.add_argument("--verbose", action="store_true", help="Enable detailed trace logging")
+    parser.add_argument("--tui", action="store_true", help="Enable immersive Terminal UI")
     
     args = parser.parse_args()
 
@@ -72,7 +73,7 @@ def main():
     grace = create_agent("Grace", "Human", "grace")
     
     # 4. Run Mission
-    manager = CampaignManager((rocky, grace), channel)
+    manager = CampaignManager((rocky, grace), channel, use_tui=args.tui)
     manager.run_campaign(missions)
 
 if __name__ == "__main__":
