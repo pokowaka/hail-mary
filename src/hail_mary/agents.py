@@ -3,11 +3,7 @@ import asyncio
 import re
 from typing import Optional, Tuple
 from .protocol import ContactLog
-
-try:
-    from gemini.gemini_client import GeminiClient
-except ImportError:
-    GeminiClient = None
+from .llm.base import LLMClient
 
 class XenoAgent(abc.ABC):
     def __init__(self, name: str, role: str):
@@ -41,10 +37,10 @@ class MockEridian(XenoAgent):
     def get_initial_thought(self, mission_prompt: str) -> str:
         return f"Mock {self.name} is ready to perform: {mission_prompt[:50]}..."
 
-class GeminiEridian(XenoAgent):
-    def __init__(self, name: str, role: str, model_name: str = "gemini-2.5-flash"):
+class LLMAlienAgent(XenoAgent):
+    def __init__(self, name: str, role: str, client: LLMClient):
         super().__init__(name, role)
-        self.client = GeminiClient(model=model_name) if GeminiClient else None
+        self.client = client
 
     def get_initial_thought(self, mission_prompt: str) -> str:
         prompt = f"{self.persona}\n\nMISSION CONTEXT:\n{mission_prompt}\n\nTASK: Analyze the situation and your mission objective. What is your initial strategy? Respond with ONLY your internal thought process starting with 'THOUGHT:'."
@@ -60,8 +56,6 @@ class GeminiEridian(XenoAgent):
         return self._parse_response(response)
 
     def _call_llm(self, prompt: str) -> str:
-        if not self.client:
-            return "THOUGHT: Error: GeminiClient not found.\nSIGNAL: 0"
         try:
             return asyncio.run(self.client.get_generated_text(prompt))
         except Exception as e:

@@ -11,6 +11,8 @@ authors = [
 ]
 dependencies = [
     "PyYAML",
+    "openai",
+    "anthropic",
 ]
 requires-python = ">=3.8"
 

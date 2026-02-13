@@ -1,14 +1,29 @@
 import argparse
 import sys
-from .agents import MockEridian, GeminiEridian
+from .agents import MockEridian, LLMAlienAgent
 from .channel import CommChannel
 from .campaign import CampaignManager
 from .mission import SequenceMission, GridMission, KnowledgeMission
 from .loader import load_campaign_from_yaml
+from .llm.clients import OpenAIClient, AnthropicClient, DeepSeekClient
+from .llm.gemini_wrapper import GeminiWrapper
+
+def get_llm_client(provider: str, model: str):
+    if provider == "openai":
+        return OpenAIClient(model=model)
+    elif provider == "anthropic":
+        return AnthropicClient(model=model)
+    elif provider == "deepseek":
+        return DeepSeekClient(model=model)
+    elif provider == "gemini":
+        return GeminiWrapper(model=model)
+    else:
+        raise ValueError(f"Unknown provider: {provider}")
 
 def main():
     parser = argparse.ArgumentParser(description="Project Hail Mary - Advanced Xeno-Comms")
-    parser.add_argument("--agent", type=str, default="mock", choices=["mock", "gemini"])
+    parser.add_argument("--agent", type=str, default="mock", choices=["mock", "llm"])
+    parser.add_argument("--provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
     parser.add_argument("--model", type=str, default="gemini-2.5-flash")
     parser.add_argument("--noise", type=float, default=0.0, help="Probability of bit flip (0.0 to 1.0)")
     parser.add_argument("--energy", type=float, default=100.0, help="Total energy budget")
@@ -21,9 +36,10 @@ def main():
     channel = CommChannel(noise_level=args.noise, total_energy=args.energy)
 
     # Setup Agents
-    if args.agent == "gemini":
-        rocky = GeminiEridian("Rocky", "Eridian", model_name=args.model)
-        grace = GeminiEridian("Grace", "Human", model_name=args.model)
+    if args.agent == "llm":
+        client = get_llm_client(args.provider, args.model)
+        rocky = LLMAlienAgent("Rocky", "Eridian", client=client)
+        grace = LLMAlienAgent("Grace", "Human", client=client)
     else:
         rocky = MockEridian("Rocky", "Eridian")
         grace = MockEridian("Grace", "Human")
