@@ -44,7 +44,9 @@ class CampaignManager:
                         "sender": e.sender,
                         "thought": e.thought,
                         "chords": e.chords,
-                        "action": e.action
+                        "action": e.action,
+                        "raw_request": e.raw_request,
+                        "raw_response": e.raw_response
                     } for e in mission.log.history
                 ],
                 "energy_remaining": self.channel.remaining_energy
@@ -77,9 +79,15 @@ class CampaignManager:
                 rocky_prompt, grace_prompt = mission.get_prompts()
                 
                 # 1. Rocky's Turn
-                t_rocky, c_rocky, _ = self.rocky.get_action(mission.log, rocky_prompt)
+                t_rocky, c_rocky, _, req_rocky, res_rocky = self.rocky.get_action(mission.log, rocky_prompt)
                 transmitted_rocky = self.channel.transmit(c_rocky)
-                ex_rocky = Exchange(sender="Rocky", thought=t_rocky, chords=transmitted_rocky)
+                ex_rocky = Exchange(
+                    sender="Rocky", 
+                    thought=t_rocky, 
+                    chords=transmitted_rocky,
+                    raw_request=req_rocky,
+                    raw_response=res_rocky
+                )
                 mission.log.record_exchange(ex_rocky)
                 
                 if tui:
@@ -87,9 +95,16 @@ class CampaignManager:
                     time.sleep(0.5)
                 
                 # 2. Grace's Turn
-                t_grace, c_grace, a_grace = self.grace.get_action(mission.log, grace_prompt)
+                t_grace, c_grace, a_grace, req_grace, res_grace = self.grace.get_action(mission.log, grace_prompt)
                 transmitted_grace = self.channel.transmit(c_grace)
-                ex_grace = Exchange(sender="Grace", thought=t_grace, chords=transmitted_grace, action=a_grace)
+                ex_grace = Exchange(
+                    sender="Grace", 
+                    thought=t_grace, 
+                    chords=transmitted_grace, 
+                    action=a_grace,
+                    raw_request=req_grace,
+                    raw_response=res_grace
+                )
                 mission.log.record_exchange(ex_grace)
                 
                 if tui:

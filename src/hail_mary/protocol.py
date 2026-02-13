@@ -7,6 +7,8 @@ class Exchange:
     thought: str
     chords: str
     action: Optional[Any] = None # Renamed from prediction for generality
+    raw_request: Optional[str] = None
+    raw_response: Optional[str] = None
 
 @dataclass
 class ContactLog:

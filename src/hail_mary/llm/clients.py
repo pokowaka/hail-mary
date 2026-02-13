@@ -4,6 +4,7 @@ from .base import LLMClient
 
 class OpenAIClient(LLMClient):
     def __init__(self, model: str = "gpt-4-turbo", api_key: str = None, base_url: str = None):
+        super().__init__()
         self.model = model
         self.client = AsyncOpenAI(
             api_key=api_key or os.getenv("OPENAI_API_KEY"),
@@ -11,25 +12,30 @@ class OpenAIClient(LLMClient):
         )
 
     async def get_generated_text(self, prompt: str) -> str:
+        self.last_prompt = prompt
         response = await self.client.chat.completions.create(
             model=self.model,
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.choices[0].message.content
+        self.last_response = response.choices[0].message.content
+        return self.last_response
 
 class AnthropicClient(LLMClient):
     def __init__(self, model: str = "claude-3-opus-20240229", api_key: str = None):
+        super().__init__()
         from anthropic import AsyncAnthropic
         self.model = model
         self.client = AsyncAnthropic(api_key=api_key or os.getenv("ANTHROPIC_API_KEY"))
 
     async def get_generated_text(self, prompt: str) -> str:
+        self.last_prompt = prompt
         response = await self.client.messages.create(
             model=self.model,
             max_tokens=1024,
             messages=[{"role": "user", "content": prompt}]
         )
-        return response.content[0].text
+        self.last_response = response.content[0].text
+        return self.last_response
 
 class DeepSeekClient(OpenAIClient):
     def __init__(self, model: str = "deepseek-chat", api_key: str = None):

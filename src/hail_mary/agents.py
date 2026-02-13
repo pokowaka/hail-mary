@@ -19,7 +19,7 @@ class XenoAgent(abc.ABC):
             self.persona = persona
 
     @abc.abstractmethod
-    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int]]:
+    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int], Optional[str], Optional[str]]:
         pass
 
     @abc.abstractmethod
@@ -28,14 +28,14 @@ class XenoAgent(abc.ABC):
         pass
 
 class MockEridian(XenoAgent):
-    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int]]:
+    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int], Optional[str], Optional[str]]:
         # Simplified mock logic that just tries to satisfy the prompt
         if "sequence" in mission_prompt:
             val_match = re.search(r"Value:\s*(\d+)", mission_prompt)
             val = int(val_match.group(1)) if val_match else 1
-            return f"Mock sending {val}", "1" * val + "0", None
+            return f"Mock sending {val}", "1" * val + "0", None, None, None
         else:
-            return "Mock Grace guessing", "1", 1
+            return "Mock Grace guessing", "1", 1, None, None
 
     def get_initial_thought(self, mission_prompt: str) -> str:
         return f"Mock {self.name} is ready to perform: {mission_prompt[:50]}..."
@@ -52,11 +52,12 @@ class LLMAlienAgent(XenoAgent):
         match = re.search(r"THOUGHT:\s*(.*)", response, re.IGNORECASE | re.DOTALL)
         return match.group(1).strip() if match else "Ready for mission."
 
-    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int]]:
+    def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int], Optional[str], Optional[str]]:
         full_prompt = f"{self.persona}\n\nMISSION CONTEXT:\n{mission_prompt}\n\nSIGNAL HISTORY:\n{log.signal_history}"
         
         response = self._call_llm(full_prompt)
-        return self._parse_response(response)
+        thought, chords, action = self._parse_response(response)
+        return thought, chords, action, self.client.last_prompt, self.client.last_response
 
     def _call_llm(self, prompt: str) -> str:
         try:
