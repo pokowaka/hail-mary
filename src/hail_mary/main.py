@@ -23,9 +23,16 @@ def get_llm_client(provider: str, model: str):
 def main():
     parser = argparse.ArgumentParser(description="Project Hail Mary - Advanced Xeno-Comms")
     parser.add_argument("--agent", type=str, default="mock", choices=["mock", "llm"])
-    parser.add_argument("--provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
-    parser.add_argument("--model", type=str, default="gemini-2.5-flash")
-    parser.add_argument("--noise", type=float, default=0.0, help="Probability of bit flip (0.0 to 1.0)")
+    
+    # Rocky Config
+    parser.add_argument("--rocky-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
+    parser.add_argument("--rocky-model", type=str, default="gemini-2.5-flash")
+    
+    # Grace Config
+    parser.add_argument("--grace-provider", type=str, default="gemini", choices=["gemini", "openai", "anthropic", "deepseek"])
+    parser.add_argument("--grace-model", type=str, default="gemini-2.5-flash")
+    
+    parser.add_argument("--noise", type=float, default=0.0, help="Probability of bit flip")
     parser.add_argument("--energy", type=float, default=100.0, help="Total energy budget")
     parser.add_argument("--mode", type=str, default="single", choices=["single", "campaign"])
     parser.add_argument("--config", type=str, help="Path to a YAML campaign config")
@@ -37,19 +44,39 @@ def main():
 
     # Setup Agents
     if args.agent == "llm":
-        client = get_llm_client(args.provider, args.model)
-        rocky = LLMAlienAgent("Rocky", "Eridian", client=client)
-        grace = LLMAlienAgent("Grace", "Human", client=client)
+        rocky_client = get_llm_client(args.rocky_provider, args.rocky_model)
+        rocky = LLMAlienAgent("Rocky", "Eridian", client=rocky_client)
+        rocky.metadata = {"provider": args.rocky_provider, "model": args.rocky_model}
+        
+        grace_client = get_llm_client(args.grace_provider, args.grace_model)
+        grace = LLMAlienAgent("Grace", "Human", client=grace_client)
+        grace.metadata = {"provider": args.grace_provider, "model": args.grace_model}
     else:
         rocky = MockEridian("Rocky", "Eridian")
+        rocky.metadata = {"provider": "mock", "model": "rule-based"}
         grace = MockEridian("Grace", "Human")
+        grace.metadata = {"provider": "mock", "model": "rule-based"}
     
     manager = CampaignManager((rocky, grace), channel)
 
     # Define Missions
     missions = []
     if args.config:
-        missions = load_campaign_from_yaml(args.config)
+        missions, global_cfg = load_campaign_from_yaml(args.config)
+        
+        # Override agents if YAML specifies provider/model globally
+        if args.agent == "llm":
+            if "rocky_provider" in global_cfg or "rocky_model" in global_cfg:
+                p = global_cfg.get("rocky_provider", args.rocky_provider)
+                m = global_cfg.get("rocky_model", args.rocky_model)
+                rocky.client = get_llm_client(p, m)
+                rocky.metadata = {"provider": p, "model": m}
+
+            if "grace_provider" in global_cfg or "grace_model" in global_cfg:
+                p = global_cfg.get("grace_provider", args.grace_provider)
+                m = global_cfg.get("grace_model", args.grace_model)
+                grace.client = get_llm_client(p, m)
+                grace.metadata = {"provider": p, "model": m}
     elif args.mode == "campaign":
         missions = [
             SequenceMission([1, 2, 3]),

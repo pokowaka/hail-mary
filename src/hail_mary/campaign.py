@@ -26,6 +26,10 @@ class CampaignManager:
             self.results.append({
                 "mission": mission.name,
                 "summary": mission.get_results(),
+                "agents": {
+                    "rocky": getattr(self.rocky, "metadata", {}),
+                    "grace": getattr(self.grace, "metadata", {})
+                },
                 "history": [
                     {
                         "sender": e.sender,

@@ -1,8 +1,8 @@
 import yaml
-from typing import List
-from .mission import AbstractMission, SequenceMission, GridMission, KnowledgeMission
+from typing import List, Tuple, Dict, Any
+from .mission import AbstractMission, SequenceMission, GridMission, KnowledgeMission, TimeMission, LogicMission, ChemistryMission
 
-def load_campaign_from_yaml(file_path: str):
+def load_campaign_from_yaml(file_path: str) -> Tuple[List[AbstractMission], Dict[str, Any]]:
     with open(file_path, "r") as f:
         config = yaml.safe_load(f)
     
@@ -34,10 +34,9 @@ def load_campaign_from_yaml(file_path: str):
             grace=m_cfg.get("grace_prompt")
         )
         
-        # Store persona overrides in mission metadata or handle in main
         mission.log.metadata["rocky_persona"] = m_cfg.get("rocky_persona") or global_personas.get("rocky")
         mission.log.metadata["grace_persona"] = m_cfg.get("grace_persona") or global_personas.get("grace")
         
         missions.append(mission)
             
-    return missions
+    return missions, global_personas
