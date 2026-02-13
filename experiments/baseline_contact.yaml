@@ -3,8 +3,8 @@
 # ============================================================
 
 # GLOBAL SETTINGS
-noise: 0.02          # Probability of a bit flip during transmission
-energy: 500.0        # Total energy budget (Each '1' costs 1.0)
+noise: 0.02
+energy: 500.0
 
 # AGENT MODELS
 personas:
@@ -24,24 +24,30 @@ personas:
 
 # MISSIONS
 missions:
-  - type: "time"
+  - name: "Clock Sync"
+    type: "time"
     params: { interval: 4 }
     rocky_prompt: "Pulse every 4 bits."
 
-  - type: "logic"
+  - name: "Binary Logic"
+    type: "logic"
     params: { operator: "AND" }
     rocky_prompt: "Teach the 'AND' logic gate."
 
-  - type: "sequence"
+  - name: "Petrova Primes"
+    type: "sequence"
     params: { sequence: [2, 3, 5, 7, 11] }
     rocky_prompt: "Transmit prime numbers."
 
-  - type: "grid"
+  - name: "Rendezvous"
+    type: "grid"
     params: { size: 5 }
     rocky_prompt: "Guide Grace to (4,4). 1:Step, 0:Turn."
 
-  - type: "chemistry"
+  - name: "Atmospheric Check"
+    type: "chemistry"
     rocky_prompt: "Describe 'Ammonia' (17, 195K)."
 
-  - type: "knowledge"
+  - name: "Entity Mapping"
+    type: "knowledge"
     rocky_prompt: "Teach 'Xenonite' = 42."

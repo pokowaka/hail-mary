@@ -26,6 +26,7 @@ def get_llm_client(provider: str, model: str):
 def main():
     parser = argparse.ArgumentParser(description="Project Hail Mary - AI Xeno-Comms Simulation")
     parser.add_argument("--config", type=str, default="experiments/baseline_contact.yaml", help="Path to the mission configuration")
+    parser.add_argument("--mission", type=str, help="Name of a specific mission to run")
     parser.add_argument("--verbose", action="store_true", help="Enable detailed trace logging")
     
     args = parser.parse_args()
@@ -40,6 +41,12 @@ def main():
 
     # 1. Load Configuration
     missions, global_cfg = load_campaign_from_yaml(args.config)
+
+    if args.mission:
+        missions = [m for m in missions if m.name.lower() == args.mission.lower()]
+        if not missions:
+            print(f"Error: Mission '{args.mission}' not found in {args.config}")
+            sys.exit(1)
 
     # 2. Setup Global Channel
     channel = CommChannel(

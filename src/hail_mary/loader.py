@@ -11,6 +11,7 @@ def load_campaign_from_yaml(file_path: str) -> Tuple[List[AbstractMission], Dict
     missions = []
     for m_cfg in config.get("missions", []):
         m_type = m_cfg.get("type")
+        m_name = m_cfg.get("name", m_type.capitalize() if m_type else "Unknown")
         params = m_cfg.get("params", {})
         
         if m_type == "sequence":
@@ -29,6 +30,7 @@ def load_campaign_from_yaml(file_path: str) -> Tuple[List[AbstractMission], Dict
             print(f"Warning: Unknown mission type '{m_type}'")
             continue
             
+        mission.name = m_name # Override the default subclass name
         mission.set_overrides(
             rocky=m_cfg.get("rocky_prompt"),
             grace=m_cfg.get("grace_prompt")
