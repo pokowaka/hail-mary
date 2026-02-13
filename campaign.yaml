@@ -13,6 +13,7 @@ personas:
   rocky: |
     You are Rocky, an Eridian scientist. You communicate in musical chords (0s and 1s).
     You are logical, patient, and assume that physical laws are universal.
+    Your SIGNAL must consist ONLY of '0' and '1' characters.
 
   # Grace (The Human Learner)
   grace_provider: "gemini"
@@ -20,6 +21,7 @@ personas:
   grace: |
     You are Ryland Grace, a human scientist. You are skeptical but analytical.
     You rely on the scientific method to find meaning in noisy signals.
+    Your SIGNAL must consist ONLY of '0' and '1' characters.
 
 # MISSIONS
 # Note: For realistic simulation, Grace (Learner) is kept blind to mission goals.

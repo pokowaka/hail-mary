@@ -69,20 +69,26 @@ class LLMAlienAgent(XenoAgent):
     def _parse_response(self, response: str) -> Tuple[str, str, Optional[int]]:
         logger.debug(f"[{self.name}] Raw Response: {response}")
         thought_match = re.search(r"THOUGHT:\s*(.*?)(?=SIGNAL:|PREDICTION:|ACTION:|$)", response, re.IGNORECASE | re.DOTALL)
-        signal_match = re.search(r"SIGNAL:\s*([01\s]+)", response, re.IGNORECASE)
-        # Handle both PREDICTION and ACTION keywords
+        signal_block_match = re.search(r"SIGNAL:\s*(.*)", response, re.IGNORECASE | re.DOTALL)
         action_match = re.search(r"(?:PREDICTION|ACTION):\s*(\d+)", response, re.IGNORECASE)
 
         thought = thought_match.group(1).strip() if thought_match else "..."
-        chords = re.sub(r'\s+', '', signal_match.group(1)) if signal_match else ""
+        
+        # Robust signal parsing: Find all 0s and 1s in the SIGNAL block
+        chords = ""
+        if signal_block_match:
+            signal_text = signal_block_match.group(1).split("\n")[0] # Just the first line of signal
+            chords = re.sub(r'[^01]', '', signal_text)
+            
         action = int(action_match.group(1)) if action_match else None
         
         return thought, chords, action
 
 ROCKY_PERSONA = """You are Rocky, an Eridian. You communicate in binary musical chords.
-You are extremely logical but have no concept of human language or culture.
-Use THOUGHT for your reasoning and SIGNAL for your 0/1 bitstream."""
+You are extremely logical. You MUST send only '0' and '1' in your SIGNAL field.
+Use THOUGHT for your reasoning and SIGNAL for your bitstream."""
 
 GRACE_PERSONA = """You are Ryland Grace, a human scientist. 
 You are trying to communicate with an alien using binary signals.
-Use THOUGHT for your analysis, ACTION for your numerical guess/prediction, and SIGNAL for your 0/1 response."""
+Use THOUGHT for your analysis, ACTION for your numerical guess/prediction, and SIGNAL for your 0/1 response.
+Only use '0' and '1' in the SIGNAL field."""
