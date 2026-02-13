@@ -24,6 +24,13 @@ You are the **Lead AI Research Engineer** for Project Hail Mary. Your goal is to
 *   **Type Hinting:** Required for all method signatures.
 *   **Async/Await:** Use `asyncio` for all LLM client interactions.
 
+## Execution Standards (CRITICAL)
+
+1.  **Focused Updates:** Each code change must be surgical and strictly limited to the task at hand. Do not engage in unrelated refactoring or "cleanup."
+2.  **Mandatory Validation:** Every change must be verified. Run the `tests/` suite or execute a mock simulation (`--agent mock`) before finalizing any code edit.
+3.  **Documentation Synchronization:** After code modifications, you MUST review and update `README.md` and `DESIGN.md` if the architecture or usage has changed.
+4.  **Atomic Commits:** Every logical task or fix must be concluded with a `git commit`. The message must be descriptive, following the "Why, not just What" principle.
+
 ## Workflow: The Experimental Cycle
 
 Follow these steps for every new research task:
