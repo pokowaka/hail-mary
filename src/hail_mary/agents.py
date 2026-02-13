@@ -1,9 +1,12 @@
 import abc
 import asyncio
 import re
+import logging
 from typing import Optional, Tuple
 from .protocol import ContactLog
 from .llm.base import LLMClient
+
+logger = logging.getLogger(__name__)
 
 class XenoAgent(abc.ABC):
     def __init__(self, name: str, role: str):
@@ -57,11 +60,14 @@ class LLMAlienAgent(XenoAgent):
 
     def _call_llm(self, prompt: str) -> str:
         try:
+            logger.debug(f"[{self.name}] Calling LLM...")
             return asyncio.run(self.client.get_generated_text(prompt))
         except Exception as e:
+            logger.error(f"[{self.name}] API Error: {e}")
             return f"THOUGHT: API Error: {e}\nSIGNAL: 0"
 
     def _parse_response(self, response: str) -> Tuple[str, str, Optional[int]]:
+        logger.debug(f"[{self.name}] Raw Response: {response}")
         thought_match = re.search(r"THOUGHT:\s*(.*?)(?=SIGNAL:|PREDICTION:|ACTION:|$)", response, re.IGNORECASE | re.DOTALL)
         signal_match = re.search(r"SIGNAL:\s*([01\s]+)", response, re.IGNORECASE)
         # Handle both PREDICTION and ACTION keywords

@@ -1,5 +1,6 @@
 import argparse
 import sys
+import logging
 from .agents import MockEridian, LLMAlienAgent
 from .channel import CommChannel
 from .campaign import CampaignManager
@@ -38,8 +39,17 @@ def main():
     parser.add_argument("--energy", type=float, default=100.0, help="Total energy budget")
     parser.add_argument("--mode", type=str, default="single", choices=["single", "campaign"])
     parser.add_argument("--config", type=str, help="Path to a YAML campaign config")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     
     args = parser.parse_args()
+
+    # Setup Logging
+    log_level = logging.DEBUG if args.verbose else logging.INFO
+    logging.basicConfig(
+        level=log_level,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        stream=sys.stderr
+    )
 
     # Setup Channel
     channel = CommChannel(noise_level=args.noise, total_energy=args.energy)
