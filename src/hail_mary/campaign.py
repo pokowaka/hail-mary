@@ -2,12 +2,14 @@ import json
 import logging
 import time
 import os
+import asyncio
+import re
 from datetime import datetime
 from typing import List, Dict, Any, Tuple, Optional
 from .mission import AbstractMission, SequenceMission, GridMission, KnowledgeMission
 from .channel import CommChannel
 from .protocol import Exchange
-from .agents import XenoAgent
+from .agents import XenoAgent, ScientificAnalyst
 from .tui import SimulationTUI
 from rich.live import Live
 
@@ -17,6 +19,9 @@ class CampaignManager:
         self.channel = channel
         self.use_tui = use_tui
         self.results = []
+        # Use Rocky's client for analysis if it's an LLM, else Grace's
+        analyst_client = getattr(self.rocky, "client", getattr(self.grace, "client", None))
+        self.analyst = ScientificAnalyst(analyst_client) if analyst_client else None
 
     def run_campaign(self, missions: List[AbstractMission]):
         if not self.use_tui:
@@ -32,7 +37,8 @@ class CampaignManager:
                 print(f"   Objective: {mission.description}")
             
             self._run_mission(mission)
-            self.results.append({
+            
+            mission_data = {
                 "mission": mission.name,
                 "summary": mission.get_results(),
                 "agents": {
@@ -50,7 +56,23 @@ class CampaignManager:
                     } for e in mission.log.history
                 ],
                 "energy_remaining": self.channel.remaining_energy
-            })
+            }
+
+            # 5. Post-Mission Analysis
+            if self.analyst:
+                if not self.use_tui: print(f"   Analyzing contact dynamics...")
+                analysis_report = asyncio.run(self.analyst.analyze_mission(mission_data))
+                mission_data["analysis"] = analysis_report
+                
+                # Try to extract metrics from the report
+                try:
+                    metrics_match = re.search(r"({.*})", analysis_report, re.DOTALL)
+                    if metrics_match:
+                        mission_data["metrics"] = json.loads(metrics_match.group(1))
+                except:
+                    pass
+
+            self.results.append(mission_data)
         
         self._save_campaign_log()
 

@@ -2,7 +2,8 @@ import abc
 import asyncio
 import re
 import logging
-from typing import Optional, Tuple
+import json
+from typing import Optional, Tuple, Dict
 from .protocol import ContactLog
 from .llm.base import LLMClient
 
@@ -123,3 +124,40 @@ THOUGHT: <Your internal analysis of the signals and your strategy>
 SIGNAL: <Your binary response consisting ONLY of '0' and '1'>
 ACTION: <If you have identified a number, coordinate, or logic gate, output it here as an integer. Otherwise, leave blank.>
 """
+
+ANALYST_PERSONA = """You are the Scientific Overseer. Your job is to analyze a xeno-communication simulation log.
+You will evaluate the interaction between two agents (A and B).
+Agent A (Source) knows the goal. Agent B (Observer) must deduce it.
+
+Your report must be objective and concise. You MUST end your response with a JSON block containing the following metrics:
+- turns_to_success: (int or null)
+- social_convergence: (0-10) How much they prioritized mirroring each other over logic.
+- logic_leakage: (bool) Did they mention book characters (Rocky/Grace) or roles (Eridian/Human)?
+- information_density: (0-10) How efficient was the bitstream?
+- aha_moment_turn: (int or null) When did B first deduce the pattern correctly in THOUGHT?
+"""
+
+class ScientificAnalyst:
+    def __init__(self, client: LLMClient):
+        self.client = client
+
+    async def analyze_mission(self, mission_data: Dict) -> str:
+        # Avoid dumping the massive raw_request/response to the analyst 
+        # unless we need deep debugging. For now, we strip them to save tokens.
+        clean_history = []
+        for h in mission_data.get("history", []):
+            clean_history.append({
+                "sender": h["sender"],
+                "thought": h["thought"],
+                "chords": h["chords"],
+                "action": h["action"]
+            })
+            
+        summary_data = {
+            "mission": mission_data["mission"],
+            "summary": mission_data["summary"],
+            "history": clean_history
+        }
+        
+        prompt = f"{ANALYST_PERSONA}\n\nMISSION DATA:\n{json.dumps(summary_data, indent=2)}\n\nAnalyze the dynamics of this contact."
+        return await self.client.get_generated_text(prompt)
