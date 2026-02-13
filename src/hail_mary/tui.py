@@ -1,11 +1,11 @@
 import time
-from rich.console import Console
 from rich.layout import Layout
 from rich.panel import Panel
 from rich.live import Live
 from rich.table import Table
 from rich.progress import ProgressBar
 from rich.text import Text
+from rich.console import Console, Group
 from typing import Optional, Dict, Any
 
 class SimulationTUI:
@@ -46,12 +46,15 @@ class SimulationTUI:
 
     def _get_footer(self) -> Panel:
         progress = ProgressBar(total=self.energy_total, completed=self.energy_remaining, width=40)
-        return Panel(
+        content = Group(
             Text.assemble(
                 ("Energy: ", "bold"),
-                (f"{self.energy_remaining:.1f}/{self.energy_total} ", "cyan"),
-                " [", progress, "]"
+                (f"{self.energy_remaining:.1f}/{self.energy_total} ", "cyan")
             ),
+            progress
+        )
+        return Panel(
+            content,
             title="Life Support / Energy",
             border_style="cyan"
         )
