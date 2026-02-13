@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+import os
 from datetime import datetime
 from typing import List, Dict, Any, Tuple, Optional
 from .mission import AbstractMission, SequenceMission, GridMission, KnowledgeMission
@@ -117,8 +118,13 @@ class CampaignManager:
                     break
 
     def _save_campaign_log(self):
-        filename = f"campaign_log_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        with open(filename, "w") as f:
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"campaign_log_{timestamp}.json"
+        log_path = filename
+        if os.path.exists("logs") and os.path.isdir("logs"):
+            log_path = os.path.join("logs", filename)
+            
+        with open(log_path, "w") as f:
             json.dump(self.results, f, indent=2)
         if not self.use_tui:
-            print(f"\nCampaign complete. Log saved to {filename}")
+            print(f"\nCampaign complete. Log saved to {log_path}")

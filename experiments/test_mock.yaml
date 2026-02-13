@@ -1,0 +1,13 @@
+# Test Mock Campaign
+noise: 0.0
+energy: 100.0
+
+# AGENT MODELS
+rocky_provider: "mock"
+grace_provider: "mock"
+
+missions:
+  - name: "Mock Sequence"
+    type: "sequence"
+    params: { sequence: [1, 2, 3] }
+    rocky_prompt: "Transmit [1, 2, 3]"

@@ -149,3 +149,7 @@ cython_debug/
 
 # PyCharm
 .idea/
+
+# Simulation Logs
+campaign_log_*.json
+logs/campaign_log_*.json

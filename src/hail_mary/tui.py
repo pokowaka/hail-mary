@@ -59,13 +59,9 @@ class SimulationTUI:
     def _get_rocky_panel(self) -> Panel:
         return Panel(
             Text.assemble(
-                ("INTERNAL THOUGHTS:
-", "bold yellow"),
+                ("INTERNAL THOUGHTS:\n", "bold yellow"),
                 (self.rocky_thought, "italic"),
-                ("
-
-OUTGOING SIGNAL:
-", "bold green"),
+                ("\n\nOUTGOING SIGNAL:\n", "bold green"),
                 (self.rocky_signal, "bold green blink" if self.rocky_signal else "dim")
             ),
             title="[Rocky's Chamber]",
@@ -75,13 +71,9 @@ OUTGOING SIGNAL:
     def _get_grace_panel(self) -> Panel:
         return Panel(
             Text.assemble(
-                ("INTERNAL ANALYSIS:
-", "bold cyan"),
+                ("INTERNAL ANALYSIS:\n", "bold cyan"),
                 (self.grace_thought, "italic"),
-                ("
-
-DECIDED ACTION:
-", "bold white"),
+                ("\n\nDECIDED ACTION:\n", "bold white"),
                 (str(self.grace_action), "bold white bold")
             ),
             title="[Grace's Chamber]",
