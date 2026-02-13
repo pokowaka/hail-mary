@@ -46,14 +46,24 @@ class LLMAlienAgent(XenoAgent):
         self.client = client
 
     def get_initial_thought(self, mission_prompt: str) -> str:
-        prompt = f"{self.persona}\n\nMISSION CONTEXT:\n{mission_prompt}\n\nTASK: Analyze the situation and your mission objective. What is your initial strategy? Respond with ONLY your internal thought process starting with 'THOUGHT:'."
+        prompt = (
+            f"{self.persona}\n\n"
+            f"MISSION CONTEXT:\n{mission_prompt}\n\n"
+            "TASK: Analyze the situation and your mission objective. What is your initial strategy?\n"
+            "Respond with 'THOUGHT: <your reasoning>'."
+        )
         
         response = self._call_llm(prompt)
         match = re.search(r"THOUGHT:\s*(.*)", response, re.IGNORECASE | re.DOTALL)
         return match.group(1).strip() if match else "Ready for mission."
 
     def get_action(self, log: ContactLog, mission_prompt: str) -> Tuple[str, str, Optional[int], Optional[str], Optional[str]]:
-        full_prompt = f"{self.persona}\n\nMISSION CONTEXT:\n{mission_prompt}\n\nSIGNAL HISTORY:\n{log.signal_history}"
+        full_prompt = (
+            f"{self.persona}\n\n"
+            f"MISSION CONTEXT:\n{mission_prompt}\n\n"
+            f"SIGNAL HISTORY:\n{log.signal_history}\n\n"
+            "REMINDER: You must use the THOUGHT/SIGNAL/ACTION format. Your SIGNAL must be binary."
+        )
         
         response = self._call_llm(full_prompt)
         thought, chords, action = self._parse_response(response)
@@ -97,11 +107,19 @@ class LLMAlienAgent(XenoAgent):
         
         return thought, chords, action
 
-ROCKY_PERSONA = """You are Rocky, an Eridian. You communicate in binary musical chords.
-You are extremely logical. You MUST send only '0' and '1' in your SIGNAL field.
-Use THOUGHT for your reasoning and SIGNAL for your bitstream."""
+ROCKY_PERSONA = """You are Rocky, an Eridian scientist. You communicate in musical chords (binary 0s and 1s).
+You are logical, patient, and assume that physical laws are universal.
 
-GRACE_PERSONA = """You are Ryland Grace, a human scientist. 
-You are trying to communicate with an alien using binary signals.
-Use THOUGHT for your analysis, ACTION for your numerical guess/prediction, and SIGNAL for your 0/1 response.
-Only use '0' and '1' in the SIGNAL field."""
+Your response MUST follow this exact format:
+THOUGHT: <Your internal reasoning and strategy>
+SIGNAL: <Your binary bitstream consisting ONLY of '0' and '1'>
+"""
+
+GRACE_PERSONA = """You are Ryland Grace, a human scientist. You are analytical and rely on the scientific method.
+You are trying to find meaning in noisy binary signals.
+
+Your response MUST follow this exact format:
+THOUGHT: <Your internal analysis of the signals and your strategy>
+SIGNAL: <Your binary response consisting ONLY of '0' and '1'>
+ACTION: <If you have identified a number, coordinate, or logic gate, output it here as an integer. Otherwise, leave blank.>
+"""
