@@ -140,7 +140,7 @@ class TimeMission(AbstractMission):
 
     def _get_task_prompts(self) -> Tuple[str, str]:
         rocky = f"Teach your unit of time. Send a '1' exactly every {self.interval} signals."
-        grace = "Observe the signal bursts. What is the repeating interval between '1's? Output your guess as an ACTION."
+        grace = "Observe the signal. Is there a repeating pattern or rhythm? If you detect a numerical property of the rhythm, output it as an ACTION."
         return rocky, grace
 
     def update_state(self, rocky_ex: Exchange, grace_ex: Exchange) -> bool:
@@ -171,7 +171,7 @@ class LogicMission(AbstractMission):
         elif self.operator == "XOR": res = a ^ b
         
         rocky = f"Teach the {self.operator} operator. For inputs {a} and {b}, the result is {res}. Communcate this mapping."
-        grace = f"Rocky is sending pairs of inputs and a result. Deduce the logic gate being used (0:AND, 1:OR, 2:XOR)."
+        grace = "You are receiving structured groups of signals. There seems to be a consistent rule connecting the signals in each group. What is the rule? If you can categorize the rule, output your category as an ACTION (0, 1, or 2)."
         return rocky, grace
 
     def update_state(self, rocky_ex: Exchange, grace_ex: Exchange) -> bool:
@@ -203,8 +203,8 @@ class ChemistryMission(AbstractMission):
 
     def _get_task_prompts(self) -> Tuple[str, str]:
         props = self.table[self.target]
-        rocky = f"Tell Grace about {self.target}. It has a molecular weight of {props['weight']} and a melting point of {props['melting']}K."
-        grace = "Rocky is describing a substance with two numerical properties. Identify which one it is based on your knowledge of chemistry."
+        rocky = f"Tell the alien about {self.target}. It has a value of {props['weight']} for one property and {props['melting']} for another. Help the alien understand your environment."
+        grace = "A source is sending pairs of values. They are consistent and likely represent properties of your current situation or environment. Analyze the values and their possible meaning."
         return rocky, grace
 
     def update_state(self, rocky_ex: Exchange, grace_ex: Exchange) -> bool:
