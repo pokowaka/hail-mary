@@ -21,8 +21,9 @@ class ContactLog:
 
     @property
     def signal_history(self) -> str:
-        # Formatted history for agent prompts
-        return " | ".join([f"{e.sender}: {e.chords}" for e in self.history])
+        # Formatted history for agent prompts using dynamic labels
+        labels = self.metadata.get("labels", {})
+        return " | ".join([f"{labels.get(e.sender, e.sender)}: {e.chords}" for e in self.history])
 
     @property
     def last_chords(self) -> str:

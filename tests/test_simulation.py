@@ -9,6 +9,14 @@ def test_protocol_recording():
     assert len(log.history) == 1
     assert log.last_chords == "110"
 
+def test_dynamic_labeling():
+    log = ContactLog(mission_name="Test Labels")
+    log.metadata["labels"] = {"Rocky": "A", "Grace": "B"}
+    ex = Exchange(sender="Rocky", thought="...", chords="111")
+    log.record_exchange(ex)
+    assert "A: 111" in log.signal_history
+    assert "Rocky" not in log.signal_history
+
 def test_channel_energy():
     channel = CommChannel(energy_per_bit=1.0, total_energy=5.0)
     # Transmitting 3 bits (3 energy units)

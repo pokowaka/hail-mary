@@ -7,6 +7,8 @@ def load_campaign_from_yaml(file_path: str) -> Tuple[List[AbstractMission], Dict
         config = yaml.safe_load(f)
     
     global_personas = config.get("personas", {})
+    settings = config.get("settings", {})
+    label_style = settings.get("label_style", "names")
     
     missions = []
     for m_cfg in config.get("missions", []):
@@ -35,6 +37,12 @@ def load_campaign_from_yaml(file_path: str) -> Tuple[List[AbstractMission], Dict
             rocky=m_cfg.get("rocky_prompt"),
             grace=m_cfg.get("grace_prompt")
         )
+        
+        # Apply labels based on style
+        if label_style == "abstract":
+            mission.log.metadata["labels"] = {"Rocky": "A", "Grace": "B"}
+        elif label_style == "source":
+             mission.log.metadata["labels"] = {"Rocky": "SOURCE", "Grace": "OBSERVER"}
         
         mission.log.metadata["rocky_persona"] = m_cfg.get("rocky_persona") or global_personas.get("rocky")
         mission.log.metadata["grace_persona"] = m_cfg.get("grace_persona") or global_personas.get("grace")

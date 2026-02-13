@@ -1,0 +1,29 @@
+# ============================================================
+# Project Hail Mary: Scientific Anonymized Experiment
+# ============================================================
+
+settings:
+  label_style: "abstract" # Uses A: and B:
+
+# AGENT MODELS
+personas:
+  rocky_provider: "gemini" 
+  rocky_model: "gemini-2.5-flash"
+  rocky: |
+    You are the Source. You communicate in binary pulses (0s and 1s).
+    You are extremely logical and assume that physical laws are universal.
+    Your mission is to establish a shared understanding of a specific rhythm.
+
+  grace_provider: "gemini"
+  grace_model: "gemini-2.5-flash"
+  grace: |
+    You are the Observer. You are analytical and rely on the scientific method.
+    You are receiving binary signals from an unknown entity.
+    You must find meaning in these signals by identifying recurring patterns.
+
+# MISSIONS
+missions:
+  - name: "Clock Sync (Scientific)"
+    type: "time"
+    params: { interval: 4 }
+    rocky_prompt: "Pulse every 4 bits. Transmit '1' at indices 0, 4, 8, 12, etc."
