@@ -2,107 +2,71 @@
 
 > *"You are Rocky. I am Grace. We save Earth and Erid. Question?"*
 
-This project is a simulation of the first contact and communication between two extraterrestrial intelligences, inspired by the book *Project Hail Mary* by Andy Weir. It uses two AI agents to explore whether a shared language can emerge from scratch using only binary signals (0s and 1s).
+This project is a high-fidelity simulation of first contact between two extraterrestrial intelligences, inspired by Andy Weir's *Project Hail Mary*. It uses two AI agents to explore the emergence of communication protocols using strictly binary signals (0s and 1s) under physical constraints like noise and energy.
 
-## The Scenario
+## The Laboratory
 
-*   **Rocky (The Eridian):** An advanced intelligence from Erid. He has observed a "natural law" (a mathematical sequence) and must teach it to the human.
-*   **Grace (The Human):** A scientist aboard the *Hail Mary*. He must decipher Rocky's musical "chords" (binary signals) and predict the next number in the sequence to solve the **Petrova Task**.
-*   **Communication:** Limited strictly to bitstrings. No ASCII, no English, no common symbols—only the logic of pulses.
+The simulation operates as a "Black Box" experiment:
+*   **Rocky (The Teacher):** An advanced Eridian who knows the "ground truth" (a mathematical law, a coordinate, or a physical property) and must teach it using binary "chords."
+*   **Grace (The Learner):** A human scientist who is blind to the environment. He sees only a stream of bits and must deduce the nature of the universe through observation and interaction.
+*   **Constraints:** Every '1' bit costs **Energy**. Signals can be corrupted by **Deep Space Noise**. This forces agents to move beyond simple Unary counting into efficient Binary or error-corrected encodings.
 
-## Core Components
+## Installation
 
-*   **`hail_mary/main.py`**: The entry point for single missions or full campaigns.
-*   **`hail_mary/mission.py`**: Modular mission logic (Sequence, Grid, Knowledge).
-*   **`hail_mary/channel.py`**: Simulates signal noise and energy constraints.
-*   **`hail_mary/campaign.py`**: Orchestrates multiple missions in a row.
-
-## Advanced Features
-
-### 1. The Energy Budget
-Every '1' bit costs energy. If the budget is depleted, the signal fails. This forces agents to invent efficient encodings (Binary vs Unary).
 ```bash
-python3 -m hail_mary.main --energy 50
+pip install -e .
 ```
 
-### 2. Signal Noise
-Simulate the harshness of deep space. Bits have a probability of being flipped during transmission.
+## Running the Mission
+
+The project uses a **YAML-First** architecture. All simulation parameters, agent models, and mission sequences are defined in configuration files located in the `experiments/` directory.
+
+### 1. Basic Run (Gemini AI)
 ```bash
-python3 -m hail_mary.main --noise 0.05
+hail-mary --config experiments/baseline_contact.yaml
 ```
 
-### 3. Diverse Scenarios
-- **Sequence (Petrova Task):** Identify mathematical patterns.
-- **Grid (Rendezvous):** Guide Grace to a target location in a 2D space.
-- **Knowledge (Elemental Mapping):** Map complex concepts like atomic weights.
-- **Time (Clock Sync):** Synchronize temporal units.
-- **Logic (Gates):** Deduce Boolean operators (AND, OR, XOR).
-
-## Mission Types & Victory Conditions
-
-Each mission has a specific internal state and a "Completion Condition" that terminates the loop and moves to the next stage of the campaign.
-
-| Type | Name | Agent Interactions | Completion Condition |
-| :--- | :--- | :--- | :--- |
-| `sequence` | Petrova Sequence | Rocky sends integers; Grace attempts to predict the next value. | Run for the length of the provided `sequence`. |
-| `grid` | Rendezvous Task | Rocky knows the target; Grace moves in 4 directions (0-3). | Grace's coordinates match the secret `target`. |
-| `time` | Temporal Sync | Rocky pulses at a fixed interval; Grace deduces the frequency. | Run for 5 "beats" of the pulse. |
-| `logic` | Logic Gate | Rocky sends inputs (A, B) and output (C). Grace deduces the operator. | Run for all 4 basic truth-table combinations. |
-| `knowledge` | Elemental Mapping | Rocky sends specific values (e.g. weights) for named entities. | Run for all elements in the mapping. |
-
-### Technical Metrics
-*   **Accuracy:** Calculated for `sequence` and `logic` based on Grace's `ACTION` output.
-*   **Efficiency:** Measured by `energy_remaining` at the end of the mission.
-*   **Latency:** Recorded as `total_steps` or turns taken to reach the goal (especially for `grid`).
-
-## Designing Experiments
-
-You can define custom "First Contact" scenarios using a YAML configuration file. 
-
-### The Asymmetric Principle
-To maintain a realistic simulation, follow the **Asymmetric Principle**:
-1.  **Rocky (Teacher)** should know the goal and the "ground truth."
-2.  **Grace (Learner)** should only know his available actions and see the history of signals. He should *never* be told he is in a grid or looking for a sequence.
-
-### Example YAML Entry
+### 2. Multi-Provider Competition
+Test how different models interact (e.g., GPT-4o vs. Claude 3.5):
+Edit `experiments/baseline_contact.yaml`:
 ```yaml
-- type: "time"
-  params:
-    interval: 5
-  rocky_prompt: "Pulse every 5 bits."
-  grace_prompt: "You see bits. What is the pattern?"
+personas:
+  rocky_provider: "openai"
+  rocky_model: "gpt-4o"
+  grace_provider: "anthropic"
+  grace_model: "claude-3-5-sonnet-20240620"
 ```
 
-## The Prompt Stack (Advanced)
+### 3. Debugging (Verbose Mode)
+See the full "Chain of Thought" and raw API responses:
+```bash
+hail-mary --verbose
+```
 
-The simulation builds the final instruction for the AI by stacking different context layers. Understanding this stack is key to designing effective experiments.
+## Mission Types
 
-| Layer | Source | Purpose |
+| Type | Scenario | Victory Condition |
 | :--- | :--- | :--- |
-| **Persona** | `personas:` or `_persona:` | Sets the "Who" (e.g., identity, logic, patience). |
-| **Mission Context** | `rocky/grace_prompt` | Sets the "What" (e.g., current goal or observation). |
-| **Signal History** | Internal State | Sets the "When" (e.g., what has been said so far). |
+| `sequence` | Petrova Task | Identify mathematical patterns (e.g. Primes). |
+| `grid` | Rendezvous | Navigate a 2D void to a secret coordinate. |
+| `time` | Temporal Sync | D deduce the frequency of Rocky's clock. |
+| `logic` | Boolean Gates | Reverse-engineer operators like AND, OR, XOR. |
+| `chemistry` | Atmosphere | Map physical constants to specific substances. |
 
-### Hierarchy
-1.  **Mission Override:** If `rocky_persona` is defined in a mission, it completely replaces the global `personas: rocky`.
-2.  **Statelessness:** Between missions, the agents' *memories* are wiped, but their *Persona* persists unless changed.
+## The Prompt Stack (Asymmetric Design)
 
-## Getting Started
+The final instruction sent to each AI is built from three layers:
+1.  **Persona:** The foundational identity (Eridian vs. Human).
+2.  **Mission Context:** The current task (e.g. "Teach the primes" for Rocky; "Observe the bits" for Grace).
+3.  **Signal History:** The log of all bits exchanged so far.
 
-### Running a Full Campaign
-Test the agents' ability to adapt to shifting goals:
+**Note:** To maintain scientific validity, Grace's prompts never contain mission-specific goals. He must discover them.
+
+## Analyzing Results
+Missions generate JSON logs. Use the built-in analyzer to see the "Aha!" moments:
 ```bash
-python3 -m hail_mary.main --mode campaign --agent gemini
+python3 -m hail_mary.analyze campaign_log_YYYYMMDD_HHMMSS.json
 ```
-
-### Analyzing the Results
-After a mission completes, it saves a JSON log. You can analyze it to see the internal reasoning of the agents:
-```bash
-python3 -m hail_mary.analyze hail_mary_log_YYYYMMDD_HHMMSS.json
-```
-
-## Observations from Experimentation
-In initial runs, the agents frequently converge on **Unary Encoding** (e.g., sending the value `3` as `1110`) as a fundamental logic. This demonstrates that even without a shared language, the "musical" nature of simple counts is a universal bridge.
 
 ---
 *Amaaze! Good, good, good!*
