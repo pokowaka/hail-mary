@@ -75,11 +75,23 @@ class LLMAlienAgent(XenoAgent):
 
         thought = thought_match.group(1).strip() if thought_match else "..."
         
-        # Robust signal parsing: Find all 0s and 1s in the SIGNAL block
+        # Robust signal parsing:
         chords = ""
         if signal_block_match:
-            signal_text = signal_block_match.group(1).split("\n")[0] # Just the first line of signal
+            # If explicit SIGNAL block exists, take it
+            signal_text = signal_block_match.group(1).split("\n")[0] 
             chords = re.sub(r'[^01]', '', signal_text)
+        else:
+            # Fallback: If no SIGNAL tag, look for binary strings in the response
+            # We filter for long binary strings or specific patterns if needed, 
+            # but for now, let's try to extract any binary sequence from lines 
+            # that don't look like THOUGHT/ACTION.
+            lines = response.strip().split("\n")
+            for line in lines:
+                cleaned = re.sub(r'[^01]', '', line)
+                if cleaned and not any(tag in line.upper() for tag in ["THOUGHT:", "ACTION:", "PREDICTION:"]):
+                    chords = cleaned
+                    break
             
         action = int(action_match.group(1)) if action_match else None
         
